@@ -17,6 +17,10 @@
  * Setup:
  * - Clasp is used for local development.
  * - Git is used for version control.
+ * 
+ * @version 1.0
+ * @date 2025-12-02
+ * @change Initial version.
  */
 
 function onOpen() {
@@ -27,6 +31,11 @@ function onOpen() {
       .addToUi();
 }
 
+/**
+ * @version 1.0
+ * @date 2025-12-02
+ * @change Initial version.
+ */
 function showDocumentation() {
   var html = HtmlService.createHtmlOutputFromFile('Documentation_HTML')
       .setTitle('Project Documentation')

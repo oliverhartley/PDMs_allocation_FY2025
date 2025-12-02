@@ -2,6 +2,10 @@
  * Consolidates partner emails from columns W, Z, AC, and AF into column AK.
  * Appends "@google.com" to each LDAP found.
  * Starts from row 3.
+ * 
+ * @version 1.1
+ * @date 2025-12-02
+ * @change Removed UI alerts, added console logs and versioning.
  */
 function processPartnerEmails() {
   var sheetName = 'Consolidate by Partner';
@@ -9,7 +13,8 @@ function processPartnerEmails() {
   var sheet = ss.getSheetByName(sheetName);
   
   if (!sheet) {
-    SpreadsheetApp.getUi().alert('Sheet "' + sheetName + '" not found.');
+    // SpreadsheetApp.getUi().alert('Sheet "' + sheetName + '" not found.');
+    console.error('Sheet "' + sheetName + '" not found.');
     return;
   }
   
@@ -52,5 +57,6 @@ function processPartnerEmails() {
   // Write to column AK starting from row 3
   sheet.getRange(3, colAK, outputEmails.length, 1).setValues(outputEmails);
   
-  SpreadsheetApp.getUi().alert('Processed ' + outputEmails.length + ' rows.');
+  // SpreadsheetApp.getUi().alert('Processed ' + outputEmails.length + ' rows.');
+  console.log('Processed ' + outputEmails.length + ' rows.');
 }
