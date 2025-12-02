@@ -87,38 +87,33 @@ function consolidateByLdap() {
       partnerLinks.push(getPartnerFileLink(partners[k], folder));
     }
     
-    outputData.push([email, '']); // Placeholder for rich text
+    var fullText = '';
+    var linkRanges = [];
     
-    var combinedRichText = SpreadsheetApp.newRichTextValue().setText(partners[0]); // Fallback
-    if (partnerLinks.length > 0) {
-      var builder = SpreadsheetApp.newRichTextValue();
-      partnerLinks.forEach(function(linkInfo, index) {
-        if (index > 0) {
-          builder.setText(builder.getText() + ', ');
-        }
-        if (linkInfo.url) {
-          builder.setText(builder.getText() + linkInfo.name);
-          // This is not a direct way to build combined rich text with multiple links, 
-          // Apps Script RichTextValueBuilder is limited. We'll use formula method.
-        } else {
-          builder.setText(builder.getText() + linkInfo.name);
-        }
-      });
-      // Instead of rich text, use HYPERLINK formula
-      var formulas = partners.map(function(partner) {
-        var linkInfo = getPartnerFileLink(partner, folder);
-        if (linkInfo.url) {
-          return '=HYPERLINK("' + linkInfo.url + '", "' + linkInfo.name + '")';
-        } else {
-          return '"' + linkInfo.name + '"';
-        }
-      });
-      outputData[j][1] = '=JOIN(", ", ARRAYFORMULA({' + formulas.join(';') + '}))';
+    for (var k = 0; k < partners.length; k++) {
+      var linkInfo = getPartnerFileLink(partners[k], folder);
+      if (k > 0) {
+        fullText += ', ';
+      }
+      var start = fullText.length;
+      fullText += linkInfo.name;
+      var end = fullText.length;
+      if (linkInfo.url) {
+        linkRanges.push({start: start, end: end, url: linkInfo.url});
+      }
     }
+    
+    var builder = SpreadsheetApp.newRichTextValue().setText(fullText);
+    linkRanges.forEach(function(range) {
+      builder.setLinkUrl(range.start, range.end, range.url);
+    });
+    richTextOutput.push([builder.build()]);
+    outputData.push([email]);
   }
   
   if (outputData.length > 0) {
-    targetSheet.getRange(2, 1, outputData.length, 2).setValues(outputData);
+    targetSheet.getRange(2, 1, outputData.length, 1).setValues(outputData);
+    targetSheet.getRange(2, 2, richTextOutput.length, 1).setRichTextValues(richTextOutput);
   }
   
   console.log('Consolidation by LDAP complete. Processed ' + sortedEmails.length + ' unique emails.');
