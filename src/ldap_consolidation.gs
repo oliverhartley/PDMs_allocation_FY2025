@@ -121,25 +121,22 @@ function consolidateByLdap() {
 
 /**
  * Searches for a partner file in Drive and returns link info.
- * @version 1.1
+ * @version 1.2
  * @date 2025-12-02
- * @change Updated file name search pattern.
+ * @change Updated to partial match for file names.
  * @param {string} partnerName The name of the partner.
  * @param {Folder} folder The Google Drive folder to search in.
  * @return {object} An object with name and url or just name.
  */
 function getPartnerFileLink(partnerName, folder) {
-  var searchFileName = partnerName + ' - Partner Dashboard';
-  var files = folder.getFilesByName(searchFileName);
-  if (files.hasNext()) {
+  var files = folder.getFiles();
+  var partnerNameLower = partnerName.toLowerCase();
+  
+  while (files.hasNext()) {
     var file = files.next();
-    return { name: file.getName(), url: file.getUrl() };
-  } else {
-    // Fallback search without suffix
-    files = folder.getFilesByName(partnerName);
-    if (files.hasNext()) {
-      var file = files.next();
-      return { name: file.getName(), url: file.getUrl() };
+    var fileName = file.getName();
+    if (fileName.toLowerCase().indexOf(partnerNameLower) !== -1) {
+      return { name: fileName, url: file.getUrl() };
     }
   }
   return { name: partnerName };
