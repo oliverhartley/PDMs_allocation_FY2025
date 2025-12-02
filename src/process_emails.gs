@@ -3,9 +3,9 @@
  * Appends "@google.com" to each LDAP found.
  * Starts from row 3.
  * 
- * @version 1.1
+ * @version 1.2
  * @date 2025-12-02
- * @change Removed UI alerts, added console logs and versioning.
+ * @change Added logic to handle multiple LDAPs per cell and remove duplicates.
  */
 function processPartnerEmails() {
   var sheetName = 'Consolidate by Partner';
@@ -35,23 +35,31 @@ function processPartnerEmails() {
   var data = range.getValues();
   var outputEmails = [];
   
+  // Regular expression to split by common separators: space, comma, slash, semicolon
+  var separatorRegex = /[\s,\/;]+/;
+  
   for (var i = 0; i < data.length; i++) {
     var row = data[i];
-    var ldaps = [];
+    var ldapsSet = new Set();
     
-    // Check columns W, Z, AC, AF (0-based index in data array)
-    // Indices in data array are colIndex - 1
-    var valW = row[colW - 1];
-    var valZ = row[colZ - 1];
-    var valAC = row[colAC - 1];
-    var valAF = row[colAF - 1];
+    // Columns to check: W, Z, AC, AF (0-based indices)
+    var columnsToCheck = [colW - 1, colZ - 1, colAC - 1, colAF - 1];
     
-    if (valW && valW.toString().trim() !== '' && valW.toString().trim() !== '#N/A') ldaps.push(valW.toString().trim() + '@google.com');
-    if (valZ && valZ.toString().trim() !== '' && valZ.toString().trim() !== '#N/A') ldaps.push(valZ.toString().trim() + '@google.com');
-    if (valAC && valAC.toString().trim() !== '' && valAC.toString().trim() !== '#N/A') ldaps.push(valAC.toString().trim() + '@google.com');
-    if (valAF && valAF.toString().trim() !== '' && valAF.toString().trim() !== '#N/A') ldaps.push(valAF.toString().trim() + '@google.com');
+    columnsToCheck.forEach(function(colIndex) {
+      var cellValue = row[colIndex];
+      if (cellValue && cellValue.toString().trim() !== '' && cellValue.toString().trim() !== '#N/A') {
+        var parts = cellValue.toString().split(separatorRegex);
+        parts.forEach(function(part) {
+          var trimmedPart = part.trim();
+          if (trimmedPart !== '' && trimmedPart !== '#N/A') {
+            ldapsSet.add(trimmedPart + '@google.com');
+          }
+        });
+      }
+    });
     
-    outputEmails.push([ldaps.join(', ')]);
+    var sortedLdaps = Array.from(ldapsSet).sort();
+    outputEmails.push([sortedLdaps.join(', ')]);
   }
   
   // Write to column AK starting from row 3
