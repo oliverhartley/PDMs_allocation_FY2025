@@ -33,6 +33,7 @@ function onOpen() {
       .addItem('Send Domain Update Emails (REAL)', 'sendDomainUpdateEmailsReal')
       .addSeparator()
       .addItem('Consolidate by LDAP', 'consolidateByLdap')
+      .addItem('Share Partner Files', 'sharePartnerFiles')
       .addToUi();
 }
 
