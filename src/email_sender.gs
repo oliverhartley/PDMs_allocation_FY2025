@@ -53,14 +53,13 @@ function sendDomainUpdateEmails(testMode) {
                  '¡Muchas gracias por tu ayuda!\n\n' +
                  'Saludos,\n' +
                  'Oliver';
-                 
-      if (testMode) {
-        GmailApp.sendEmail('oliverhartley@google.com', subject, body);
+               if (testMode) {
+        GmailApp.sendEmail('oliverhartley@google.com', subject, body, {cc: 'jcarrique@google.com'});
         console.log('Test email sent to oliverhartley@google.com for partner: ' + partnerName);
         emailsSent++;
         break; // Send only one email in test mode
       } else {
-        GmailApp.sendEmail(recipients, subject, body);
+        GmailApp.sendEmail(recipients, subject, body, {cc: 'jcarrique@google.com'});
         console.log('Email sent to ' + recipients + ' for partner: ' + partnerName);
         emailsSent++;
       }
