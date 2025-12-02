@@ -31,6 +31,8 @@ function onOpen() {
       .addSeparator()
       .addItem('Send Domain Update Emails (Test)', 'sendDomainUpdateEmailTest')
       .addItem('Send Domain Update Emails (REAL)', 'sendDomainUpdateEmailsReal')
+      .addSeparator()
+      .addItem('Consolidate by LDAP', 'consolidateByLdap')
       .addToUi();
 }
 
