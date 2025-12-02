@@ -28,6 +28,9 @@ function onOpen() {
       .createMenu('DRP Management')
       .addItem('Show Documentation', 'showDocumentation')
       .addItem('Process Partner Emails', 'processPartnerEmails')
+      .addSeparator()
+      .addItem('Send Domain Update Emails (Test)', 'sendDomainUpdateEmailTest')
+      .addItem('Send Domain Update Emails (REAL)', 'sendDomainUpdateEmailsReal')
       .addToUi();
 }
 
