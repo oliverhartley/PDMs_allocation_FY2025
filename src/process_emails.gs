@@ -41,10 +41,10 @@ function processPartnerEmails() {
     var valAC = row[colAC - 1];
     var valAF = row[colAF - 1];
     
-    if (valW && valW.toString().trim() !== '') ldaps.push(valW.toString().trim() + '@google.com');
-    if (valZ && valZ.toString().trim() !== '') ldaps.push(valZ.toString().trim() + '@google.com');
-    if (valAC && valAC.toString().trim() !== '') ldaps.push(valAC.toString().trim() + '@google.com');
-    if (valAF && valAF.toString().trim() !== '') ldaps.push(valAF.toString().trim() + '@google.com');
+    if (valW && valW.toString().trim() !== '' && valW.toString().trim() !== '#N/A') ldaps.push(valW.toString().trim() + '@google.com');
+    if (valZ && valZ.toString().trim() !== '' && valZ.toString().trim() !== '#N/A') ldaps.push(valZ.toString().trim() + '@google.com');
+    if (valAC && valAC.toString().trim() !== '' && valAC.toString().trim() !== '#N/A') ldaps.push(valAC.toString().trim() + '@google.com');
+    if (valAF && valAF.toString().trim() !== '' && valAF.toString().trim() !== '#N/A') ldaps.push(valAF.toString().trim() + '@google.com');
     
     outputEmails.push([ldaps.join(', ')]);
   }
