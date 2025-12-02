@@ -23,6 +23,7 @@ function onOpen() {
   SpreadsheetApp.getUi()
       .createMenu('DRP Management')
       .addItem('Show Documentation', 'showDocumentation')
+      .addItem('Process Partner Emails', 'processPartnerEmails')
       .addToUi();
 }
 
