@@ -53,7 +53,7 @@ function sendDomainUpdateEmails(testMode) {
                  '¡Muchas gracias por tu ayuda!\n\n' +
                  'Saludos,\n' +
                  'Oliver';
-               if (testMode) {
+      if (testMode) {
         GmailApp.sendEmail('oliverhartley@google.com', subject, body, {cc: 'jcarrique@google.com'});
         console.log('Test email sent to oliverhartley@google.com for partner: ' + partnerName);
         emailsSent++;
