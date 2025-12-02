@@ -12,9 +12,9 @@
 /**
  * Consolidates partner data by LDAP from the 'Consolidate by Partner' sheet 
  * into the 'Consolidate by ldap' sheet, linking to partner files in Google Drive.
- * @version 1.1
+ * @version 1.3
  * @date 2025-12-02
- * @change Added Google Drive file linking for partner names.
+ * @change Updated partner name column to AH (34).
  */
 function consolidateByLdap() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -33,7 +33,7 @@ function consolidateByLdap() {
   }
   
   // Column indices (1-based)
-  var colA = 1;  // Partner Name
+  var colAH = 34; // Partner Name
   var colAK = 37; // Emails
   
   var range = sourceSheet.getRange(3, 1, lastRow - 2, colAK);
@@ -43,7 +43,7 @@ function consolidateByLdap() {
   
   for (var i = 0; i < data.length; i++) {
     var row = data[i];
-    var partnerName = row[colA - 1];
+    var partnerName = row[colAH - 1];
     var emails = row[colAK - 1];
     
     if (emails && emails.toString().trim() !== '' && partnerName && partnerName.toString().trim() !== '') {

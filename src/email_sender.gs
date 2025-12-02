@@ -4,9 +4,9 @@
 
 /**
  * Sends emails to partners requesting domain updates.
- * @version 1.0
+ * @version 1.1
  * @date 2025-12-02
- * @change Initial version.
+ * @change Updated partner name column to AH (34).
  * @param {boolean} testMode - If true, sends only the first email to oliverhartley@google.com.
  */
 function sendDomainUpdateEmails(testMode) {
@@ -26,7 +26,7 @@ function sendDomainUpdateEmails(testMode) {
   }
   
   // Column indices (1-based)
-  var colA = 1;  // Partner Name
+  var colAH = 34; // Partner Name
   var colAI = 35; // Domain
   var colAK = 37; // Emails
   
@@ -39,7 +39,7 @@ function sendDomainUpdateEmails(testMode) {
   
   for (var i = 0; i < data.length; i++) {
     var row = data[i];
-    var partnerName = row[colA - 1];
+    var partnerName = row[colAH - 1];
     var domain = row[colAI - 1];
     var emails = row[colAK - 1];
     
