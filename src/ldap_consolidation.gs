@@ -72,6 +72,12 @@ function consolidateByLdap() {
   
   var driveFolderId = '1GT-A2Hkg75uXxQF0FYCKROXW8rBw_XjC';
   var folder = DriveApp.getFolderById(driveFolderId);
+  var files = folder.getFiles();
+  var cachedFiles = [];
+  while (files.hasNext()) {
+    var file = files.next();
+    cachedFiles.push({ name: file.getName(), url: file.getUrl() });
+  }
   
   var outputData = [];
   var richTextOutput = [];
@@ -83,15 +89,11 @@ function consolidateByLdap() {
     var partners = Array.from(ldapMap[email]).sort();
     var partnerLinks = [];
     
-    for (var k = 0; k < partners.length; k++) {
-      partnerLinks.push(getPartnerFileLink(partners[k], folder));
-    }
-    
     var fullText = '';
     var linkRanges = [];
     
     for (var k = 0; k < partners.length; k++) {
-      var linkInfo = getPartnerFileLink(partners[k], folder);
+      var linkInfo = getPartnerFileLink(partners[k], cachedFiles);
       if (k > 0) {
         fullText += ', ';
       }
@@ -120,23 +122,21 @@ function consolidateByLdap() {
 }
 
 /**
- * Searches for a partner file in Drive and returns link info.
- * @version 1.2
+ * Searches for a partner file in cached files and returns link info.
+ * @version 1.3
  * @date 2025-12-02
- * @change Updated to partial match for file names.
+ * @change Updated to use cached files for performance.
  * @param {string} partnerName The name of the partner.
- * @param {Folder} folder The Google Drive folder to search in.
+ * @param {Array} cachedFiles Array of cached file objects {name, url}.
  * @return {object} An object with name and url or just name.
  */
-function getPartnerFileLink(partnerName, folder) {
-  var files = folder.getFiles();
+function getPartnerFileLink(partnerName, cachedFiles) {
   var partnerNameLower = partnerName.toLowerCase();
   
-  while (files.hasNext()) {
-    var file = files.next();
-    var fileName = file.getName();
-    if (fileName.toLowerCase().indexOf(partnerNameLower) !== -1) {
-      return { name: fileName, url: file.getUrl() };
+  for (var i = 0; i < cachedFiles.length; i++) {
+    var file = cachedFiles[i];
+    if (file.name.toLowerCase().indexOf(partnerNameLower) !== -1) {
+      return { name: file.name, url: file.url };
     }
   }
   return { name: partnerName };
